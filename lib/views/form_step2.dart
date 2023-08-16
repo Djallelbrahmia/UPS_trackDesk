@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
 import 'package:ups_trackdesk/provider/data_provider.dart';
@@ -6,6 +7,7 @@ import 'package:ups_trackdesk/views/form_step3.dart';
 import 'package:ups_trackdesk/views/navbar.dart';
 import 'package:ups_trackdesk/views/text_widget.dart';
 
+import '../services/local_storage/client_db.dart';
 import '../utils/const.dart';
 import '../utils/utils.dart';
 
@@ -26,12 +28,15 @@ class _SecondStepState extends State<SecondStep> {
   final _villeFocusNode = FocusNode();
   final _zipFocusNode = FocusNode();
   TypeOfClient? _type = TypeOfClient.particulier;
+  late final ClientDbService _clientService;
+
   @override
   void initState() {
     _namecontroller = TextEditingController();
     _adresseController = TextEditingController();
     _villecontroller = TextEditingController();
     _zipcontroller = TextEditingController();
+    _clientService = ClientDbService();
 
     super.initState();
   }
@@ -55,6 +60,8 @@ class _SecondStepState extends State<SecondStep> {
     FocusScope.of(context).unfocus();
 
     if (isValid) {
+    
+
       provider.collectSecondStepData(
           adressDest: _adresseController.text,
           nameDest: _namecontroller.text,
@@ -207,7 +214,35 @@ class _SecondStepState extends State<SecondStep> {
               ),
               Visibility(
                   visible: _type == TypeOfClient.client,
-                  child: _clientDropDown()),
+                  child: Container(
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withOpacity(0.5)),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(8))),
+                    child: TypeAheadField(
+                      suggestionsCallback: _clientService.getSuggestion,
+                      itemBuilder: (context, ClientDb? client) {
+                        final suggested = client!;
+                        return ListTile(
+                          title: Text(suggested.name),
+                        );
+                      },
+                      onSuggestionSelected: (ClientDb? client) {
+                        setState(() {
+                          _notChanged = false;
+                          _namecontroller.text = client!.name;
+                          _adresseController.text = client!.adress;
+                          _villecontroller.text = client!.ville;
+                          _zipcontroller.text = client!.zip;
+                        });
+                      },
+                    ),
+                  )),
               const SizedBox(
                 height: 16,
               ),
@@ -503,46 +538,6 @@ class _SecondStepState extends State<SecondStep> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _clientDropDown() {
-    return DropdownButtonHideUnderline(
-      child: DropdownButton<String>(
-          style: TextStyle(
-              color: Theme.of(context).colorScheme.secondary,
-              fontWeight: FontWeight.w700,
-              fontSize: 16),
-          value: _client,
-          onChanged: (value) {
-            setState(() {
-              _client = value!;
-            });
-            print(_client);
-          },
-          hint: const Text("Choisir un client"),
-          items: const [
-            DropdownMenuItem(
-              child: Text("SONATRACH"),
-              value: "SONATRACH",
-            ),
-            DropdownMenuItem(
-              child: Text("Aeroport"),
-              value: "Aeroport",
-            ),
-            DropdownMenuItem(
-              child: Text("DHL"),
-              value: "DHL",
-            ),
-            DropdownMenuItem(
-              child: Text("PizzaHut"),
-              value: "PizzaHut",
-            ),
-            DropdownMenuItem(
-              child: Text("Sntf"),
-              value: "Sntf",
-            ),
-          ]),
     );
   }
 }

@@ -87,25 +87,28 @@ class LabelService {
     await _ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
     await getBordereau(bareCode: bordereau.bareCode);
-    final updateCount = await db.update(bordereauTable, {
-      userIdColumn: bordereau.userId,
-      nameExpColumn: nameExp,
-      adressExpColumn: adressExp,
-      villeexpColumn: adressExp,
-      zipExpColumn: zipExp,
-      nameDestColumn: nameDest,
-      adressDestColumn: adressDestColumn,
-      villeDestColumn: villeDest,
-      zipDestColumn: zipDest,
-      packageWeightColumn: packageWeight,
-      numbreOfitemsColumn: numbreOfitems,
-      typeDeLivraisonColumn: typeDeLivraison,
-      typeDePaymentColumn: typeDePayment,
-      bareCodeColumn: bordereau.bareCode,
-      bordoreauUrlColumn: bordoreauUrl,
-      ackReceiptColumn: ackReceipt,
-      isSyncColumn: isSync,
-    });
+    final updateCount = await db.update(
+        bordereauTable,
+        {
+          userIdColumn: bordereau.userId,
+          nameExpColumn: nameExp,
+          adressExpColumn: adressExp,
+          villeexpColumn: adressExp,
+          zipExpColumn: zipExp,
+          nameDestColumn: nameDest,
+          adressDestColumn: adressDestColumn,
+          villeDestColumn: villeDest,
+          zipDestColumn: zipDest,
+          packageWeightColumn: packageWeight,
+          numbreOfitemsColumn: numbreOfitems,
+          typeDeLivraisonColumn: typeDeLivraison,
+          typeDePaymentColumn: typeDePayment,
+          bordoreauUrlColumn: bordoreauUrl,
+          ackReceiptColumn: ackReceipt,
+          isSyncColumn: isSync,
+        },
+        where: 'bareCode=?',
+        whereArgs: [bordereau.bareCode]);
     if (updateCount == 0) {
       throw CouldNotUpdateBordereau();
     } else {
@@ -249,10 +252,10 @@ class LabelService {
         userIdColumn: owner.userId,
         nameExpColumn: nameExp,
         adressExpColumn: adressExp,
-        villeexpColumn: adressExp,
+        villeexpColumn: villeexp,
         zipExpColumn: zipExp,
         nameDestColumn: nameDest,
-        adressDestColumn: adressDestColumn,
+        adressDestColumn: adressDest,
         villeDestColumn: villeDest,
         zipDestColumn: zipDest,
         packageWeightColumn: packageWeight,

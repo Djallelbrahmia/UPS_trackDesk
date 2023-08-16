@@ -85,8 +85,9 @@ class _HistoryWidgetState extends State<HistoryWidget> {
             'numbreOfItems': provider.numbreOfItems,
             'bordoreauUrl': bordoreauUrl,
             'ackOfReceipt': ackUrl,
-            'addedDate':
-                "${DateTime.now().day.toString()}/${DateTime.now().month.toString()}/${DateTime.now().year.toString()} à  ${DateTime.now().hour.toString()}:${DateTime.now().minute.toString()}h",
+            'addedDate': widget.date,
+            'Created': DateTime.now(),
+            'bareCode': provider.bareCode,
           });
         } else {
           final bref = FirebaseStorage.instance
@@ -114,8 +115,9 @@ class _HistoryWidgetState extends State<HistoryWidget> {
             'numbreOfItems': provider.numbreOfItems,
             'bordoreauUrl': bordoreauUrl,
             'ackOfReceipt': '',
-            'addedDate':
-                "${DateTime.now().day.toString()}/${DateTime.now().month.toString()}/${DateTime.now().year.toString()} à  ${DateTime.now().hour.toString()}:${DateTime.now().minute.toString()}h",
+            'addedDate': widget.date,
+            'Created': DateTime.now(),
+            'bareCode': provider.bareCode,
           });
         }
         service.updateBordereau(

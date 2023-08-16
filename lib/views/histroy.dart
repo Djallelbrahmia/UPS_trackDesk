@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
 import 'package:ups_trackdesk/provider/form_model.dart';
 import 'package:ups_trackdesk/services/local_storage/crud_local_services.dart';
@@ -25,11 +26,20 @@ class _HistoryViewState extends State<HistoryView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          leading: InkWell(
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+              child: const Icon(IconlyLight.arrow_left)),
+        ),
         body: FutureBuilder(
             future: service.getAllBordereau(),
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.done:
+                  print(snapshot.data!.toList()[0].adressDest);
+
                   if (snapshot.data!.toList().isNotEmpty) {
                     final data = snapshot.data!.toList();
                     return GridView.count(
@@ -101,18 +111,5 @@ class _HistoryViewState extends State<HistoryView> {
                   );
               }
             }));
-    // return Scaffold(
-    //   appBar: AppBar(
-    //     leading: InkWell(
-    //         onTap: () {
-    //           Navigator.of(context).pop();
-    //         },
-    //         child: Icon(
-    //           Icons.arrow_back,
-    //           color: Theme.of(context).colorScheme.primary,
-    //         )),
-    //   ),
-    //   body: Center(child: const HistoryWidget()),
-    // );
   }
 }

@@ -38,13 +38,19 @@ class _ThirdStepState extends State<ThirdStep> {
     super.dispose();
   }
 
+  bool isNumeric(String? str) {
+    if (str == null || str.isEmpty) {
+      return false;
+    }
+
+    return double.tryParse(str) != null;
+  }
+
   void _submitForm(BuildContext context) {
     final isValid = _formKey.currentState!.validate();
     final provider = Provider.of<DataProvider>(context, listen: false);
 
     FocusScope.of(context).unfocus();
-    print(_typeDeLivraisonHolder);
-    print(_typeDePaymentHolder);
 
     if (isValid) {
       provider.collectThirdStepData(
@@ -248,6 +254,7 @@ class _ThirdStepState extends State<ThirdStep> {
                             _notChanged = false;
                           });
                         },
+                        keyboardType: TextInputType.number,
                         textInputAction: TextInputAction.next,
                         onEditingComplete: () {
                           FocusScope.of(context)
@@ -256,7 +263,10 @@ class _ThirdStepState extends State<ThirdStep> {
                         controller: _nombreDeColisController,
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return " Entrer le Nombre s'il vous plait ";
+                            return " Entrer le Nombre de colis s'il vous plait ";
+                          }
+                          if (!isNumeric(value)) {
+                            return "Entrer un nombre valide !";
                           } else {
                             return null;
                           }
@@ -294,6 +304,7 @@ class _ThirdStepState extends State<ThirdStep> {
                         height: 4,
                       ),
                       TextFormField(
+                        keyboardType: TextInputType.number,
                         textInputAction: TextInputAction.next,
                         onChanged: (value) {
                           setState(() {
@@ -308,6 +319,9 @@ class _ThirdStepState extends State<ThirdStep> {
                         validator: (value) {
                           if (value!.isEmpty) {
                             return " Entrer le poids s'il vous plait ";
+                          }
+                          if (!isNumeric(value)) {
+                            return "Entrer un nombre valide !";
                           } else {
                             return null;
                           }

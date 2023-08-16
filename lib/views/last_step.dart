@@ -122,8 +122,8 @@ class _LastStepState extends State<LastStep> {
             'numbreOfItems': provider.getFormData[uid]!.numbreOfItems,
             'bordoreauUrl': bordoreauUrl,
             'ackOfReceipt': ackUrl,
-            'addedDate':
-                "${DateTime.now().day.toString()}/${DateTime.now().month.toString()}/${DateTime.now().year.toString()} à  ${DateTime.now().hour.toString()}:${DateTime.now().minute.toString()}h",
+            'addedDate': label.addedDate,
+            'Created': DateTime.now()
           });
         } else {
           final bref = FirebaseStorage.instance
@@ -155,8 +155,8 @@ class _LastStepState extends State<LastStep> {
             'numbreOfItems': provider.getFormData[uid]!.numbreOfItems,
             'bordoreauUrl': bordoreauUrl,
             'ackOfReceipt': '',
-            'addedDate':
-                "${DateTime.now().day.toString()}/${DateTime.now().month.toString()}/${DateTime.now().year.toString()} à  ${DateTime.now().hour.toString()}:${DateTime.now().minute.toString()}h",
+            'addedDate': label.addedDate,
+            'Created': DateTime.now()
           });
         }
         service.updateBordereau(
@@ -176,10 +176,10 @@ class _LastStepState extends State<LastStep> {
           typeDePayment: provider.getFormData[uid]!.typeDePayment,
           bordoreauUrl: provider.getFormData[uid]!.bordoreauUrl,
           ackReceipt: provider.getFormData[uid]!.ackReceipt,
-          addedDate:
-              "${DateTime.now().day.toString()}/${DateTime.now().month.toString()}/${DateTime.now().year.toString()} à  ${DateTime.now().hour.toString()}:${DateTime.now().minute.toString()}h",
+          addedDate: label.addedDate,
           isSync: true,
         );
+
         setState(() {
           _isLoading = false;
         });
@@ -214,8 +214,7 @@ class _LastStepState extends State<LastStep> {
                   typeDePayment: provider.getFormData[uid]!.typeDePayment,
                   bordoreauUrl: provider.getFormData[uid]!.bordoreauUrl,
                   ackReceipt: provider.getFormData[uid]!.ackReceipt,
-                  addedDate:
-                      "${DateTime.now().day.toString()}/${DateTime.now().month.toString()}/${DateTime.now().year.toString()} à  ${DateTime.now().hour.toString()}:${DateTime.now().minute.toString()}h",
+                  addedDate: label.addedDate,
                   isSync: false,
                 );
                 if (mounted) {
@@ -252,7 +251,6 @@ class _LastStepState extends State<LastStep> {
       provider.collectLastStepData(base64.encode(_bordoreau!),
           _ackReceipt == null ? '' : base64.encode(_ackReceipt!));
       provider.addItem(uid);
-
       try {
         await service.getBordereau(
             bareCode: provider.getFormData[uid]!.bareCode);
@@ -289,7 +287,7 @@ class _LastStepState extends State<LastStep> {
             provider.addItem(uid);
             await FirebaseFirestore.instance
                 .collection("handForm")
-                .doc(uid)
+                .doc(provider.getFormData[uid]!.bareCode)
                 .set({
               'bareCode': provider.getFormData[uid]!.bareCode,
               'userId': userId,
@@ -309,6 +307,7 @@ class _LastStepState extends State<LastStep> {
               'ackOfReceipt': ackUrl,
               'addedDate':
                   "${DateTime.now().day.toString()}/${DateTime.now().month.toString()}/${DateTime.now().year.toString()} à  ${DateTime.now().hour.toString()}:${DateTime.now().minute.toString()}h",
+              'Created': DateTime.now()
             });
           } else {
             final bref = FirebaseStorage.instance
@@ -322,7 +321,7 @@ class _LastStepState extends State<LastStep> {
 
             await FirebaseFirestore.instance
                 .collection("handForm")
-                .doc(uid)
+                .doc(provider.getFormData[uid]!.bareCode)
                 .set({
               'bareCode': provider.getFormData[uid]!.bareCode,
               'userId': userId,
@@ -342,6 +341,7 @@ class _LastStepState extends State<LastStep> {
               'ackOfReceipt': '',
               'addedDate':
                   "${DateTime.now().day.toString()}/${DateTime.now().month.toString()}/${DateTime.now().year.toString()} à  ${DateTime.now().hour.toString()}:${DateTime.now().minute.toString()}h",
+              'Created': DateTime.now()
             });
           }
 
@@ -366,8 +366,10 @@ class _LastStepState extends State<LastStep> {
                   "${DateTime.now().day.toString()}/${DateTime.now().month.toString()}/${DateTime.now().year.toString()} à  ${DateTime.now().hour.toString()}:${DateTime.now().minute.toString()}h",
               isSync: true,
               bareCode: provider.getFormData[uid]!.bareCode);
-          Navigator.of(context)
-              .pushNamedAndRemoveUntil(MyHomePage.routeName, (route) => false);
+          if (mounted) {
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                MyHomePage.routeName, (route) => false);
+          }
         } on TimeoutException {
           setState(() {
             _isLoading = false;

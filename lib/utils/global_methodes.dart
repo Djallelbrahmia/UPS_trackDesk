@@ -23,7 +23,14 @@ class GlobalMethods {
               const SizedBox(
                 width: 16,
               ),
-              Text(title)
+              Text(
+                title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 14,
+                ),
+              )
             ],
           ),
           actions: [
@@ -34,7 +41,7 @@ class GlobalMethods {
                 }
               },
               child: const TextWidget(
-                text: "Cancel",
+                text: "Annuler",
                 color: Colors.cyan,
                 textsize: 20,
               ),
@@ -44,7 +51,7 @@ class GlobalMethods {
                 fct();
               },
               child: const TextWidget(
-                text: "Yes",
+                text: "Oui",
                 color: Colors.red,
                 textsize: 20,
               ),

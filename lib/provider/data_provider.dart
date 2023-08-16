@@ -30,6 +30,7 @@ class DataProvider with ChangeNotifier {
   }
 
   void addItem(String id) {
+    print(_secondStepData);
     _formData.putIfAbsent(
         id,
         () => FormModel(
