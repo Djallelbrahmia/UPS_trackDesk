@@ -1,7 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:ups_trackdesk/services/local_storage/crud_local_services.dart';
-import 'package:ups_trackdesk/utils/firebase_consts.dart';
 import 'package:ups_trackdesk/views/histroy.dart';
 import 'package:ups_trackdesk/views/text_widget.dart';
 
@@ -23,7 +23,8 @@ class _NavBarState extends State<NavBar> {
   }
 
   Future<void> getUserName() async {
-    final user = await service.getUser(userId: authInstance.currentUser!.uid);
+    final user =
+        await service.getUser(userId: FirebaseAuth.instance.currentUser!.uid);
 
     setState(() {
       userName = user.userName;

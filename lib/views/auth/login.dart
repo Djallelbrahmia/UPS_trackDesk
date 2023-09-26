@@ -1,6 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
-import 'package:ups_trackdesk/utils/firebase_consts.dart';
 import 'package:ups_trackdesk/utils/global_methodes.dart';
 import 'package:ups_trackdesk/views/home_page.dart';
 import 'package:ups_trackdesk/views/widget/loading_manager.dart';
@@ -31,7 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
       });
       _formKey.currentState!.save();
       try {
-        await authInstance.signInWithEmailAndPassword(
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
             email: _emailController.text, password: _passwordController.text);
       } catch (e) {
         GlobalMethods.ErrorDialog(subtitle: e.toString(), context: context);
@@ -40,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
           _isLoading = false;
         });
       }
-      if (authInstance.currentUser != null) {
+      if (FirebaseAuth.instance.currentUser != null) {
         if (mounted) {
           Navigator.of(context)
               .pushNamedAndRemoveUntil(MyHomePage.routeName, (route) => false);

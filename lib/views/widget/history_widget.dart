@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -19,7 +20,6 @@ import 'package:uuid/uuid.dart';
 
 import '../../provider/form_model.dart';
 import '../../services/local_storage/crud_local_services.dart';
-import '../../utils/firebase_consts.dart';
 
 class HistoryWidget extends StatefulWidget {
   const HistoryWidget({super.key, required this.date});
@@ -50,7 +50,7 @@ class _HistoryWidgetState extends State<HistoryWidget> {
     if (isValid) {
       try {
         final String uid = const Uuid().v4();
-        final userId = authInstance.currentUser!.uid;
+        final userId = FirebaseAuth.instance.currentUser!.uid;
         if (isWithAck) {
           final bref = FirebaseStorage.instance
               .ref()

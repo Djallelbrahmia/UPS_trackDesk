@@ -92,10 +92,19 @@ class ClientDbService {
     }
   }
 
-  Future<List<ClientDb>> getSuggestion(String id) async {
-    final client = await getAllClients();
-    final searchResult = client.where((element) => element.id == id).toList();
-    return searchResult;
+  Future<List<ClientDb>> getSuggestion(String name) async {
+    try {
+      final client = await getAllClients();
+      final searchResult = client
+          .where((element) =>
+              element.name.toString().toLowerCase().trim() ==
+                  name.toLowerCase().trim() ||
+              element.id.toLowerCase().trim() == name.toLowerCase().trim())
+          .toList();
+      return searchResult;
+    } on DataBaseIsNotOpen {
+      return [];
+    }
   }
 
   Future<ClientDb> createBordereau({
@@ -193,7 +202,7 @@ class ClientDb {
         zip = map[zipColumnt] as String;
   @override
   String toString() {
-    return "$adress | $name | $adress | $ville | $zip";
+    return id;
   }
 
   @override

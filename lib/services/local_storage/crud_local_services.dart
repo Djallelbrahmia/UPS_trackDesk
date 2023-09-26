@@ -416,7 +416,7 @@ class DataBaseBordereau {
 const String createUserTable = ''' 
 CREATE TABLE IF NOT EXISTS "User" (
 	"id"	INTEGER NOT NULL,
-	"profilPic"	TEXT UNIQUE,
+	"profilPic"	TEXT ,
 	"userName"	TEXT NOT NULL,
 	"userId"	TEXT NOT NULL UNIQUE,
 	FOREIGN KEY("userId") REFERENCES "User"("id"),

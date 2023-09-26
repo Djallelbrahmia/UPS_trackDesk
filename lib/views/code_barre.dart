@@ -45,11 +45,7 @@ class _BarcodeState extends State<Barcode> {
     if (!mounted) return;
 
     setState(() {
-      if (isNumeric(barcodeScanRes)) {
-        _scanBarcode = barcodeScanRes;
-      } else {
-        _scanBarcode = 'Echec, réessayez';
-      }
+      _scanBarcode = barcodeScanRes;
     });
   }
 

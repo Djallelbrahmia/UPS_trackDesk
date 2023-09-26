@@ -59,11 +59,12 @@ class DataProvider with ChangeNotifier {
     required String villeexp,
     required String zipExp,
   }) {
+    print(zipExp);
     _firstStepData = {
       'nameExp': nameExp,
       'adressExp': adressExp,
       'villeexp': villeexp,
-      'zipExp': nameExp,
+      'zipExp': zipExp,
     };
     notifyListeners();
   }

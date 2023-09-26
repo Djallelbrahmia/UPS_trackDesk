@@ -87,7 +87,6 @@ class _FirstStepState extends State<FirstStep> {
         });
       }
     }
-    bool _chosedFromClient = false;
     return WillPopScope(
       onWillPop: () async {
         provider.emptyEdit();
@@ -246,9 +245,9 @@ class _FirstStepState extends State<FirstStep> {
                           setState(() {
                             _notChanged = false;
                             _namecontroller.text = client!.name;
-                            _adresseController.text = client!.adress;
-                            _villecontroller.text = client!.ville;
-                            _zipcontroller.text = client!.zip;
+                            _adresseController.text = client.adress;
+                            _villecontroller.text = client.ville;
+                            _zipcontroller.text = client.zip;
                           });
                         },
                       ),
@@ -283,13 +282,13 @@ class _FirstStepState extends State<FirstStep> {
                                 .requestFocus(_adressFocusNode);
                           },
                           controller: _namecontroller,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return " Entrer le Nom  s'il vous plait ";
-                            } else {
-                              return null;
-                            }
-                          },
+                          // validator: (value) {
+                          //   if (value!.isEmpty) {
+                          //     return " Entrer le Nom  s'il vous plait ";
+                          //   } else {
+                          //     return null;
+                          //   }
+                          // },
                           style: TextStyle(
                               color: Theme.of(context).colorScheme.secondary),
                           decoration: InputDecoration(
@@ -335,13 +334,13 @@ class _FirstStepState extends State<FirstStep> {
                           },
                           controller: _adresseController,
                           focusNode: _adressFocusNode,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return " Entrer l'adresse s'il vous plait ";
-                            } else {
-                              return null;
-                            }
-                          },
+                          // validator: (value) {
+                          //   if (value!.isEmpty) {
+                          //     return " Entrer l'adresse s'il vous plait ";
+                          //   } else {
+                          //     return null;
+                          //   }
+                          // },
                           style: TextStyle(
                               color: Theme.of(context).colorScheme.secondary),
                           decoration: InputDecoration(
@@ -386,13 +385,13 @@ class _FirstStepState extends State<FirstStep> {
                             FocusScope.of(context).requestFocus(_zipFocusNode);
                           },
                           controller: _villecontroller,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return " Entrer la ville s'il vous plait ";
-                            } else {
-                              return null;
-                            }
-                          },
+                          // validator: (value) {
+                          //   if (value!.isEmpty) {
+                          //     return " Entrer la ville s'il vous plait ";
+                          //   } else {
+                          //     return null;
+                          //   }
+                          // },
                           style: TextStyle(
                               color: Theme.of(context).colorScheme.secondary),
                           decoration: InputDecoration(
@@ -437,13 +436,13 @@ class _FirstStepState extends State<FirstStep> {
                             _submitForm(context);
                           },
                           controller: _zipcontroller,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return " Entrer le code postal s'il vous plait ";
-                            } else {
-                              return null;
-                            }
-                          },
+                          // validator: (value) {
+                          //   if (value!.isEmpty) {
+                          //     return " Entrer le code postal s'il vous plait ";
+                          //   } else {
+                          //     return null;
+                          //   }
+                          // },
                           style: TextStyle(
                               color: Theme.of(context).colorScheme.secondary),
                           decoration: InputDecoration(

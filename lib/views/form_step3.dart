@@ -219,7 +219,7 @@ class _ThirdStepState extends State<ThirdStep> {
                   const Spacer(),
                   _dropDown(
                       defaultValue: _typeDePaymentDefault,
-                      values: ['E/C', 'F/C', 'P/P'],
+                      values: ['E/C', 'F/C', 'P/P', 'N/R'],
                       hinttext: 'type de Payment',
                       onChanged: (value) {
                         setState(() {

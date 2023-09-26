@@ -53,10 +53,10 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBNnhh3dDM2PwVIIHa38p7pT367Knze5VI',
-    appId: '1:282108342883:android:3174ee6dbc9b25b135be56',
-    messagingSenderId: '282108342883',
-    projectId: 'upstrackdesk',
-    storageBucket: 'upstrackdesk.appspot.com',
+    apiKey: 'AIzaSyCY1P8MzVe5ct4ACekCk5ixcNl7gLFvCRw',
+    appId: '1:1024576646860:android:3f6c04a87ca6df4d759c69',
+    messagingSenderId: '1024576646860',
+    projectId: 'ups-track-7d29a',
+    storageBucket: 'ups-track-7d29a.appspot.com',
   );
 }

@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "282108342883",
-    "project_id": "upstrackdesk",
-    "storage_bucket": "upstrackdesk.appspot.com"
+    "project_number": "1024576646860",
+    "project_id": "ups-track-7d29a",
+    "storage_bucket": "ups-track-7d29a.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:282108342883:android:3174ee6dbc9b25b135be56",
+        "mobilesdk_app_id": "1:1024576646860:android:3f6c04a87ca6df4d759c69",
         "android_client_info": {
           "package_name": "com.example.ups_trackdesk"
         }
       },
       "oauth_client": [
         {
-          "client_id": "282108342883-fmqnt3tqeounjeg8osja4til9kqla49e.apps.googleusercontent.com",
+          "client_id": "1024576646860-glisj5cvpscv34sjp897mif4a7haj4sn.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBNnhh3dDM2PwVIIHa38p7pT367Knze5VI"
+          "current_key": "AIzaSyCY1P8MzVe5ct4ACekCk5ixcNl7gLFvCRw"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "282108342883-fmqnt3tqeounjeg8osja4til9kqla49e.apps.googleusercontent.com",
+              "client_id": "1024576646860-glisj5cvpscv34sjp897mif4a7haj4sn.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -60,8 +60,6 @@ class _SecondStepState extends State<SecondStep> {
     FocusScope.of(context).unfocus();
 
     if (isValid) {
-    
-
       provider.collectSecondStepData(
           adressDest: _adresseController.text,
           nameDest: _namecontroller.text,
@@ -71,7 +69,6 @@ class _SecondStepState extends State<SecondStep> {
     }
   }
 
-  String _client = "SONATRACH";
   bool _notChanged = true;
   @override
   Widget build(BuildContext context) {
@@ -236,9 +233,9 @@ class _SecondStepState extends State<SecondStep> {
                         setState(() {
                           _notChanged = false;
                           _namecontroller.text = client!.name;
-                          _adresseController.text = client!.adress;
-                          _villecontroller.text = client!.ville;
-                          _zipcontroller.text = client!.zip;
+                          _adresseController.text = client.adress;
+                          _villecontroller.text = client.ville;
+                          _zipcontroller.text = client.zip;
                         });
                       },
                     ),
@@ -272,13 +269,13 @@ class _SecondStepState extends State<SecondStep> {
                           FocusScope.of(context).requestFocus(_adressFocusNode);
                         },
                         controller: _namecontroller,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return " Entrer le Nom  s'il vous plait ";
-                          } else {
-                            return null;
-                          }
-                        },
+                        // validator: (value) {
+                        //   if (value!.isEmpty) {
+                        //     return " Entrer le Nom  s'il vous plait ";
+                        //   } else {
+                        //     return null;
+                        //   }
+                        // },
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.secondary),
                         decoration: InputDecoration(
@@ -323,13 +320,13 @@ class _SecondStepState extends State<SecondStep> {
                         },
                         controller: _adresseController,
                         focusNode: _adressFocusNode,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return " Entrer l'adresse s'il vous plait ";
-                          } else {
-                            return null;
-                          }
-                        },
+                        // validator: (value) {
+                        //   if (value!.isEmpty) {
+                        //     return " Entrer l'adresse s'il vous plait ";
+                        //   } else {
+                        //     return null;
+                        //   }
+                        // },
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.secondary),
                         decoration: InputDecoration(
@@ -374,13 +371,13 @@ class _SecondStepState extends State<SecondStep> {
                           FocusScope.of(context).requestFocus(_zipFocusNode);
                         },
                         controller: _villecontroller,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return " Entrer la ville s'il vous plait ";
-                          } else {
-                            return null;
-                          }
-                        },
+                        // validator: (value) {
+                        //   if (value!.isEmpty) {
+                        //     return " Entrer la ville s'il vous plait ";
+                        //   } else {
+                        //     return null;
+                        //   }
+                        // },
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.secondary),
                         decoration: InputDecoration(
@@ -425,13 +422,13 @@ class _SecondStepState extends State<SecondStep> {
                           _submitForm(context);
                         },
                         controller: _zipcontroller,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return " Entrer le code postal s'il vous plait ";
-                          } else {
-                            return null;
-                          }
-                        },
+                        // validator: (value) {
+                        //   if (value!.isEmpty) {
+                        //     return " Entrer le code postal s'il vous plait ";
+                        //   } else {
+                        //     return null;
+                        //   }
+                        // },
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.secondary),
                         decoration: InputDecoration(

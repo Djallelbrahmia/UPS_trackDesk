@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -10,11 +11,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:iconly/iconly.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:ups_trackdesk/provider/data_provider.dart';
 import 'package:ups_trackdesk/services/local_storage/crud_exceptions.dart';
-import 'package:ups_trackdesk/utils/firebase_consts.dart';
 import 'package:ups_trackdesk/views/text_widget.dart';
 import 'package:ups_trackdesk/views/widget/loading_manager.dart';
 import 'package:uuid/uuid.dart';
@@ -73,7 +72,8 @@ class _LastStepState extends State<LastStep> {
         _isLoading = true;
       });
       final String uid = const Uuid().v4();
-      final userId = authInstance.currentUser!.uid;
+
+      final userId = FirebaseAuth.instance.currentUser!.uid;
       final user = service.getUser(userId: userId);
       provider.collectLastStepData(base64.encode(_bordoreau!),
           _ackReceipt == null ? '' : base64.encode(_ackReceipt!));
@@ -246,7 +246,7 @@ class _LastStepState extends State<LastStep> {
         _isLoading = true;
       });
       final String uid = const Uuid().v4();
-      final userId = authInstance.currentUser!.uid;
+      final userId = FirebaseAuth.instance.currentUser!.uid;
       final user = service.getUser(userId: userId);
       provider.collectLastStepData(base64.encode(_bordoreau!),
           _ackReceipt == null ? '' : base64.encode(_ackReceipt!));
@@ -255,8 +255,177 @@ class _LastStepState extends State<LastStep> {
         await service.getBordereau(
             bareCode: provider.getFormData[uid]!.bareCode);
         if (mounted) {
-          GlobalMethods.ErrorDialog(
-              subtitle: "Sa existe déja", context: context);
+          GlobalMethods.WarningDialog(
+              subtitle: "Voulez vous l'écraser?",
+              context: context,
+              fct: () async {
+                setState(() {
+                  _isLoading = true;
+                });
+                await service.deleteBordereau(
+                    barecode: provider.getFormData[uid]!.bareCode);
+                try {
+                  if (isWithAck) {
+                    final bref = FirebaseStorage.instance
+                        .ref()
+                        .child('images/bordoreau')
+                        .child('$uid.jpg');
+                    await bref
+                        .putData(_bordoreau!)
+                        .timeout(const Duration(seconds: 10));
+                    final String bordoreauUrl = await bref
+                        .getDownloadURL()
+                        .timeout(const Duration(seconds: 10));
+                    final ackref = FirebaseStorage.instance
+                        .ref()
+                        .child('images/ack')
+                        .child('$uid.jpg');
+                    await ackref
+                        .putData(_ackReceipt!)
+                        .timeout(const Duration(seconds: 10));
+                    final String ackUrl = await ackref
+                        .getDownloadURL()
+                        .timeout(const Duration(seconds: 10));
+                    provider.addItem(uid);
+                    await FirebaseFirestore.instance
+                        .collection("handForm")
+                        .doc(provider.getFormData[uid]!.bareCode)
+                        .set({
+                      'bareCode': provider.getFormData[uid]!.bareCode,
+                      'userId': userId,
+                      'NameExp': provider.getFormData[uid]!.nameExp,
+                      'adressExp': provider.getFormData[uid]!.adressExp,
+                      'villeexp': provider.getFormData[uid]!.villeexp,
+                      'zipExp': provider.getFormData[uid]!.zipExp,
+                      'nameDest': provider.getFormData[uid]!.nameDest,
+                      'adressDest': provider.getFormData[uid]!.adressDest,
+                      'villeDest': provider.getFormData[uid]!.villeDest,
+                      'zipDest': provider.getFormData[uid]!.zipDest,
+                      'typeDeLivraison':
+                          provider.getFormData[uid]!.typeDeLivraison,
+                      'typeDePayment': provider.getFormData[uid]!.typeDePayment,
+                      'packageWeight': provider.getFormData[uid]!.packageWeight,
+                      'numbreOfItems': provider.getFormData[uid]!.numbreOfItems,
+                      'bordoreauUrl': bordoreauUrl,
+                      'ackOfReceipt': ackUrl,
+                      'addedDate':
+                          "${DateTime.now().day.toString()}/${DateTime.now().month.toString()}/${DateTime.now().year.toString()} à  ${DateTime.now().hour.toString()}:${DateTime.now().minute.toString()}h",
+                      'Created': DateTime.now()
+                    });
+                  } else {
+                    final bref = FirebaseStorage.instance
+                        .ref()
+                        .child('images/bordoreau')
+                        .child('$uid.jpg');
+                    await bref
+                        .putData(_bordoreau!)
+                        .timeout(const Duration(seconds: 10));
+                    final String bordoreauUrl = await bref.getDownloadURL();
+
+                    await FirebaseFirestore.instance
+                        .collection("handForm")
+                        .doc(provider.getFormData[uid]!.bareCode)
+                        .set({
+                      'bareCode': provider.getFormData[uid]!.bareCode,
+                      'userId': userId,
+                      'NameExp': provider.getFormData[uid]!.nameExp,
+                      'adressExp': provider.getFormData[uid]!.adressExp,
+                      'villeexp': provider.getFormData[uid]!.villeexp,
+                      'zipExp': provider.getFormData[uid]!.zipExp,
+                      'nameDest': provider.getFormData[uid]!.nameDest,
+                      'adressDest': provider.getFormData[uid]!.adressDest,
+                      'villeDest': provider.getFormData[uid]!.villeDest,
+                      'zipDest': provider.getFormData[uid]!.zipDest,
+                      'typeDeLivraison':
+                          provider.getFormData[uid]!.typeDeLivraison,
+                      'typeDePayment': provider.getFormData[uid]!.typeDePayment,
+                      'packageWeight': provider.getFormData[uid]!.packageWeight,
+                      'numbreOfItems': provider.getFormData[uid]!.numbreOfItems,
+                      'bordoreauUrl': bordoreauUrl,
+                      'ackOfReceipt': '',
+                      'addedDate':
+                          "${DateTime.now().day.toString()}/${DateTime.now().month.toString()}/${DateTime.now().year.toString()} à  ${DateTime.now().hour.toString()}:${DateTime.now().minute.toString()}h",
+                      'Created': DateTime.now()
+                    });
+                  }
+
+                  service.createBordereau(
+                      owner: await user,
+                      userId: userId,
+                      nameExp: provider.getFormData[uid]!.nameExp,
+                      adressExp: provider.getFormData[uid]!.adressExp,
+                      villeexp: provider.getFormData[uid]!.villeexp,
+                      zipExp: provider.getFormData[uid]!.zipExp,
+                      nameDest: provider.getFormData[uid]!.nameDest,
+                      adressDest: provider.getFormData[uid]!.adressDest,
+                      villeDest: provider.getFormData[uid]!.villeDest,
+                      zipDest: provider.getFormData[uid]!.zipDest,
+                      numbreOfitems: provider.getFormData[uid]!.numbreOfItems,
+                      packageWeight: provider.getFormData[uid]!.packageWeight,
+                      typeDeLivraison:
+                          provider.getFormData[uid]!.typeDeLivraison,
+                      typeDePayment: provider.getFormData[uid]!.typeDePayment,
+                      bordoreauUrl: provider.getFormData[uid]!.bordoreauUrl,
+                      ackReceipt: provider.getFormData[uid]!.ackReceipt,
+                      addedDate:
+                          "${DateTime.now().day.toString()}/${DateTime.now().month.toString()}/${DateTime.now().year.toString()} à  ${DateTime.now().hour.toString()}:${DateTime.now().minute.toString()}h",
+                      isSync: true,
+                      bareCode: provider.getFormData[uid]!.bareCode);
+                  if (mounted) {
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                        MyHomePage.routeName, (route) => false);
+                  }
+                } on TimeoutException {
+                  setState(() {
+                    _isLoading = false;
+                  });
+
+                  GlobalMethods.WarningDialog(
+                      title: "Probleme de connexion",
+                      subtitle:
+                          "voulez vous enregistrer et essayer plus tard? ",
+                      context: context,
+                      fct: () async {
+                        service.createBordereau(
+                            owner: await user,
+                            userId: userId,
+                            nameExp: provider.getFormData[uid]!.nameExp,
+                            adressExp: provider.getFormData[uid]!.adressExp,
+                            villeexp: provider.getFormData[uid]!.villeexp,
+                            zipExp: provider.getFormData[uid]!.zipExp,
+                            nameDest: provider.getFormData[uid]!.nameDest,
+                            adressDest: provider.getFormData[uid]!.adressDest,
+                            villeDest: provider.getFormData[uid]!.villeDest,
+                            zipDest: provider.getFormData[uid]!.zipDest,
+                            numbreOfitems:
+                                provider.getFormData[uid]!.numbreOfItems,
+                            packageWeight:
+                                provider.getFormData[uid]!.packageWeight,
+                            typeDeLivraison:
+                                provider.getFormData[uid]!.typeDeLivraison,
+                            typeDePayment:
+                                provider.getFormData[uid]!.typeDePayment,
+                            bordoreauUrl:
+                                provider.getFormData[uid]!.bordoreauUrl,
+                            ackReceipt: provider.getFormData[uid]!.ackReceipt,
+                            addedDate:
+                                "${DateTime.now().day.toString()}/${DateTime.now().month.toString()}/${DateTime.now().year.toString()} à  ${DateTime.now().hour.toString()}:${DateTime.now().minute.toString()}h",
+                            isSync: false,
+                            bareCode: provider.getFormData[uid]!.bareCode);
+                        if (mounted) {
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              MyHomePage.routeName, (route) => false);
+                        }
+                      });
+                } catch (e) {
+                  setState(() {
+                    _isLoading = false;
+                  });
+                  GlobalMethods.ErrorDialog(
+                      subtitle: 'Erreur !', context: context);
+                }
+              },
+              title: 'Sa existe déja');
         }
         setState(() {
           _isLoading = false;

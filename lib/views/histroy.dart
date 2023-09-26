@@ -38,9 +38,7 @@ class _HistoryViewState extends State<HistoryView> {
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.done:
-                  print(snapshot.data!.toList()[0].adressDest);
-
-                  if (snapshot.data!.toList().isNotEmpty) {
+                  if (snapshot.hasData && snapshot.data!.toList().isNotEmpty) {
                     final data = snapshot.data!.toList();
                     return GridView.count(
                         crossAxisCount: 1,

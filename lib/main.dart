@@ -1,8 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:ups_trackdesk/provider/data_provider.dart';
-import 'package:ups_trackdesk/utils/firebase_consts.dart';
 import 'package:ups_trackdesk/views/auth/login.dart';
 import 'package:ups_trackdesk/views/code_barre.dart';
 import 'package:ups_trackdesk/views/form_step1.dart';
@@ -14,6 +15,8 @@ import 'package:ups_trackdesk/views/last_step.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
   runApp(const MyApp());
 }
@@ -119,7 +122,7 @@ class _MyAppState extends State<MyApp> {
                       return const HistoryView();
                     },
                   },
-                  home: (authInstance.currentUser == null)
+                  home: (FirebaseAuth.instance.currentUser == null)
                       ? const LoginScreen()
                       : const MyHomePage(),
                 );
